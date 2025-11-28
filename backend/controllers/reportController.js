@@ -343,6 +343,7 @@ const updateReport = async (req, res) => {
 // @desc    Delete a user's own report
 // @route   DELETE /api/reports/:id (for users)
 // @access  Private
+
 const deleteUserReport = async (req, res) => {
   try {
     const report = await Report.findById(req.params.id);
@@ -397,7 +398,41 @@ const createComment = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
+   await Report.findByIdAndUpdate(req.params.id, { 
+    $inc: { commentCount: 1 } 
+  });
+  // ---------------------
+
+  res.status(201).json(comment);
+
 };
+const incrementView = async (req, res) => {
+  try {
+    const report = await Report.findById(req.params.id);
+
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    // Logic: Only count if user is logged in AND hasn't viewed yet
+    if (req.user && !report.viewedBy.includes(req.user._id)) {
+      // Add user ID to the list
+      report.viewedBy.push(req.user._id);
+
+      // Increment the number
+      report.views = (report.views || 0) + 1;
+
+      await report.save();
+    }
+
+    res.status(200).json(report);
+  } catch (error) {
+    console.error("View Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 
 // @desc    Get all comments for a report
 // @route   GET /api/reports/:id/comments
@@ -476,6 +511,22 @@ const updateComment = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+const shareReport = async (req, res) => {
+  try {
+    const report = await Report.findById(req.params.id);
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+    // Increment share count
+    report.shareCount = (report.shareCount || 0) + 1;
+    await report.save();
+
+    res.status(200).json(report);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 // In reportController.js
 
@@ -541,4 +592,6 @@ module.exports = {
   deleteComment,
   updateComment,
   likeComment,
+  shareReport,
+  incrementView,
 };

@@ -1,0 +1,154 @@
+.post-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 600px; /* Classic feed width */
+  width: 100%;
+  margin-bottom: 2rem; /* Space between posts */
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+}
+.poster-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.poster-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  background-color: #efefef;
+  border-radius: 50%;
+}
+
+.poster-name {
+  font-weight: bold;
+  color: #262626;
+}
+
+.post-image {
+  width: 100%;
+  max-height: 750px; /* Limit image height */
+  object-fit: cover;
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+}
+
+.post-actions {
+  padding: 0.5rem 1rem;
+}
+
+.post-content {
+  padding: 0 1rem 1rem 1rem;
+  color: #333;
+}
+
+.post-details {
+  font-size: 0.9rem;
+}
+
+.post-description {
+  margin: 0.5rem 0;
+  /* This tells the browser to break words if they are too long */
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* Older browser support */
+  word-break: break-all; /* Helps with very long, unbroken strings */
+}
+.post-contact {
+  font-size: 0.9rem;
+  color: #0d6efd;
+  font-weight: 500;
+}
+/* In Post.css */
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.heart-icon {
+  width: 28px;
+  height: 28px;
+  color: #8e8e8e; /* Default grey color */
+  transition: all 0.2s ease-in-out;
+}
+
+.heart-icon.liked {
+  color: #f70b1e; /* The classic "like" red */
+}
+
+.action-button:hover .heart-icon {
+  transform: scale(2);
+}
+
+.like-counter {
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 0.5rem;
+}
+.poster-name-link {
+  text-decoration: none;
+}
+.poster-name-link:hover .poster-name {
+  text-decoration: underline;
+}
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+}
+
+.post-owner-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.edit-button, .delete-button {
+    background: none;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.edit-button {
+    color: #0d6efd;
+}
+.edit-button:hover {
+    background-color: #e7f1ff;
+}
+
+.delete-button {
+    color: #dc3545;
+}
+.delete-button:hover {
+    background-color: #fbebee;
+}
+.share-icon {
+  width: 26px; /* Slightly smaller than the heart */
+  height: 26px;
+  color: #8e8e8e;
+  transition: color 0.2s ease-in-out;
+}
+
+.action-button:hover .share-icon {
+  color: #333; /* Darken on hover */
+}
+/* Replace the old .poster-name-link rules with this */
+
+.poster-info-link {
+  text-decoration: none; /* Removes the underline from the whole block */
+}
+
+.poster-info-link:hover .poster-name {
+  text-decoration: underline; /* Adds the underline back to just the name on hover */
+}

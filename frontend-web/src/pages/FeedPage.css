@@ -1,0 +1,58 @@
+/* Keep all the other CSS (.feed-container, .feed-grid, etc.) */
+.app {
+  color: white;
+  /* Define a large gradient that goes beyond the screen size */
+  background: linear-gradient(45deg, #e90eb9,#f108cb, #0ae4c0, hsl(251, 83%, 44%));
+  background-size: 400% 400%;
+  /* Apply the animation */
+  animation: gradientAnimation 15s ease infinite;
+  min-height: 100vh;
+}
+h1, h2 {
+    text-align: center;
+    color: white;
+}
+h2 {
+    font-weight: 400;
+    margin-bottom: 2rem;
+}
+
+
+
+
+.feed-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the posts in the column */
+  gap: 2rem;
+}
+/* Define the animation for the background gradient */
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+/* --- Profile Page Tab Styles --- */
+.profile-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tab-button {
+  padding: 1rem 1.5rem;
+  border: none;
+  background: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  position: relative;
+  bottom: -1px;
+}
+
+.tab-button.active {
+  color: white;
+  border-bottom: 2px solid white;
+}

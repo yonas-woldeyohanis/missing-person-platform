@@ -1,0 +1,16 @@
+import { AuthProvider } from "./context/auth/AuthContext";
+import "./i18n";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App"; // Make sure this is importing App, not FeedPage
+// In frontend/src/index.js
+import 'leaflet/dist/leaflet.css';
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </React.StrictMode>
+);

@@ -1,0 +1,5 @@
+/* frontend/src/components/MainLayout.css */
+
+.main-content {
+  padding-top: 80px; /* This is the magic number */
+}

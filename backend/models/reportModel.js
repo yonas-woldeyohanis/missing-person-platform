@@ -13,22 +13,22 @@ const reportSchema = mongoose.Schema(
       required: [true, "Please add a name"],
     },
     latitude: {
-  type: Number,
-  required: false, // Make it optional for now
-},
-longitude: {
-  type: Number,
-  required: false,
-},
+      type: Number,
+      required: false, // Make it optional for now
+    },
+    longitude: {
+      type: Number,
+      required: false,
+    },
     contactInfo: {
-  type: String,
-  required: [true, 'Please provide a contact phone number or email'],
-},
-likes: {
-  type: [mongoose.Schema.Types.ObjectId], // Defines an array of User IDs
-  ref: 'User',
-  default: [], // Defaults to an empty array
-},
+      type: String,
+      required: [true, "Please provide a contact phone number or email"],
+    },
+    likes: {
+      type: [mongoose.Schema.Types.ObjectId], // Defines an array of User IDs
+      ref: "User",
+      default: [], // Defaults to an empty array
+    },
     age: {
       type: Number,
       required: [true, "Please add an age"],
@@ -45,17 +45,34 @@ likes: {
       type: String,
       required: false,
     },
-   status: {
-  type: String,
-  required: true,
-  
-  enum: ['pending', 'approved', 'rejected', 'found'],
-  default: 'pending',
-},
-region: {
-  type: String,
-  required: [true, 'Please specify the region'],
-},
+    status: {
+      type: String,
+      required: true,
+
+      enum: ["pending", "approved", "rejected", "found"],
+      default: "pending",
+    },
+    region: {
+      type: String,
+      required: [true, "Please specify the region"],
+    },
+    shareCount: {
+      type: Number,
+      default: 0,
+    },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    viewedBy: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
+    },
+    commentCount: {
+      type: Number,
+      default: 0,
+    },
     // Mongoose automatically adds a createdAt and updatedAt timestamp
   },
   {

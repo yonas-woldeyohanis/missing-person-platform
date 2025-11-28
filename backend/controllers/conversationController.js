@@ -1,89 +1,98 @@
-const Conversation = require('../models/conversationModel');
-const Report = require('../models/reportModel');
-const Message = require('../models/messageModel')
+const Conversation = require("../models/conversationModel");
+const Report = require("../models/reportModel");
+const User = require("../models/userModel");
 
-// @desc    Start a new conversation or get an existing one
-// @route   POST /api/conversations
-// @access  Private
+// --- 1. START OR GET EXISTING CONVERSATION ---
 const startConversation = async (req, res) => {
-  // The person starting the chat is the logged-in user (req.user.id)
-  // The other participant is the user who created the report (report.user)
+  console.log("📥 [BACKEND] Start Conversation Request Received");
   const { reportId } = req.body;
+
+  if (!reportId) {
+    return res.status(400).json({ message: "Report ID is required" });
+  }
 
   try {
     const report = await Report.findById(reportId);
     if (!report) {
-      return res.status(404).json({ message: 'Report not found' });
+      console.log("❌ Report not found");
+      return res.status(404).json({ message: "Report not found" });
     }
 
-    const posterId = report.user.toString();
-    const inquirerId = req.user.id;
+    // SAFE ID EXTRACTION (Fixes object vs string issues)
+    const senderId = req.user._id.toString();
+    const receiverId = (report.user._id || report.user).toString(); // Handle populated or raw ID
 
-    // Prevent a user from starting a conversation with themselves
-    if (posterId === inquirerId) {
-        return res.status(400).json({ message: 'You cannot start a chat about your own report.' });
+    console.log(`Checking chat between: ${senderId} and ${receiverId}`);
+
+    // Prevent chatting with yourself
+    if (senderId === receiverId) {
+      console.log("⚠️ User tried to chat with self");
+      return res
+        .status(400)
+        .json({ message: "You cannot chat with yourself." });
     }
 
-    // Check if a conversation between these two users about this report already exists
+    // Check if conversation exists (Order doesn't matter with $all)
     let conversation = await Conversation.findOne({
-      report: reportId,
-      participants: { $all: [posterId, inquirerId] },
+      members: { $all: [senderId, receiverId] },
     });
 
-    // If no conversation exists, create a new one
-    if (!conversation) {
-      conversation = await Conversation.create({
-        report: reportId,
-        participants: [posterId, inquirerId],
-      });
+    if (conversation) {
+      console.log("✅ Found existing conversation:", conversation._id);
+      return res.status(200).json(conversation);
     }
 
-    // Send back the conversation ID
-    res.status(200).json(conversation);
+    // Create New
+    const newConversation = new Conversation({
+      members: [senderId, receiverId],
+    });
 
+    const savedConversation = await newConversation.save();
+    console.log("🎉 Created NEW conversation:", savedConversation._id);
+    res.status(200).json(savedConversation);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error: ' + error.message });
+    console.error("🔥 Create Conversation Error:", error);
+    res.status(500).json(error);
   }
 };
 
-// We will also need a way to get all of a user's conversations for their "Inbox"
-// @desc    Get all conversations for a user
-// @route   GET /api/conversations
-// @access  Private
+// --- 2. GET USER CONVERSATIONS ---
 const getUserConversations = async (req, res) => {
-    try {
-        const conversations = await Conversation.find({ participants: req.user.id })
-            .populate('participants', 'name') // Get the name of the participants
-            .populate('report', 'name'); // Get the name from the report
-        res.status(200).json(conversations);
-    } catch (error) {
-        res.status(500).json({ message: 'Server Error: ' + error.message });
-    }
+  try {
+    // 1. Find conversations
+    const conversations = await Conversation.find({
+      members: { $in: [req.user._id] },
+    })
+      .populate("members", "name email username") // Get real names
+      .sort({ updatedAt: -1 });
+
+    // 2. Filter out corrupt data (where members might be null)
+    const validConversations = conversations.filter(
+      (c) => c.members && c.members.length === 2 && c.members[0] && c.members[1]
+    );
+
+    res.status(200).json(validConversations);
+  } catch (error) {
+    console.error("Inbox Fetch Error:", error);
+    res.status(500).json(error);
+  }
 };
-// @desc    Get all messages for a conversation
-// @route   GET /api/conversations/:id/messages
-// @access  Private
-// In conversationController.js
+
+// --- 3. GET MESSAGES ---
+const Message = require("../models/messageModel");
 
 const getMessagesForConversation = async (req, res) => {
-    try {
-        const messages = await Message.find({ conversationId: req.params.id })
-            .populate('sender', 'name')
-            .sort({ createdAt: 'asc' });
+  try {
+    const messages = await Message.find({
+      conversationId: req.params.id,
+    })
+      .populate("sender", "name email username")
+      .sort({ createdAt: -1 }); // Important for GiftedChat
 
-        // --- THIS IS THE CRUCIAL DEBUG LOG ---
-        console.log(`Found ${messages.length} historical messages for convo ${req.params.id}.`);
-        // Let's check the content of the last message to see if imageUrl is there
-        if (messages.length > 0) {
-            console.log('Last message content:', messages[messages.length - 1]);
-        }
-        // ----------------------------------------
-
-        res.json(messages);
-    } catch (error) {
-        console.error("FETCH MESSAGES ERROR:", error);
-        res.status(500).json({ message: 'Server Error' });
-    }
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 };
 
 module.exports = {

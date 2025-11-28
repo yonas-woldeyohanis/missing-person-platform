@@ -1,0 +1,236 @@
+/* In frontend/src/components/Navbar.css */
+
+.navbar {
+  background-color: #333;
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  position: fixed; /* CHANGED from 'relative' */
+  top: 0;          /* ADDED */
+  left: 0;         
+  width: 100%;     
+  z-index: 1010;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* ADDED (optional but recommended) */
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+/* --- Mobile Styles --- */
+/* On mobile, we hide the desktop links and show the hamburger */
+.navbar-links {
+  display: none;
+}
+
+.hamburger-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger-menu div {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+}
+
+/* --- Desktop Styles (using a Media Query) --- */
+@media (min-width: 768px) {
+  /* On desktop, we hide the hamburger menu and show the full links */
+  .hamburger-menu {
+    display: none;
+  }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  /* Styling for the individual navigation links */
+  .navbar-links a {
+    color: white;
+    text-decoration: none;
+    position: relative; /* Essential for the underline effect */
+    padding-bottom: 5px; /* Creates space for the underline */
+  }
+
+  /* The animated underline (initially hidden) */
+  .navbar-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #61dafb; /* A bright highlight color */
+    transform: scaleX(0); /* Hidden by default */
+    transform-origin: center;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  /* Show the underline on hover */
+  .navbar-links a:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* Special styling for the Login button */
+  .nav-login-button {
+    background-color: #0d6efd;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+  }
+
+  /* The Login button does not need the underline effect */
+  .nav-login-button::after {
+    display: none;
+  }
+
+  .nav-login-button:hover {
+    background-color: #0a58ca;
+  }
+}
+
+/* --- Language Switcher Styles --- */
+.language-switcher {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 1rem; /* Only visible on desktop */
+}
+
+.language-switcher button {
+  background: none;
+  border: 1px solid white;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.language-switcher button:hover {
+    background-color: white;
+    color: #333;
+}
+
+
+/* --- Mobile Navigation Styles --- */
+.mobile-nav-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 998;
+}
+
+.mobile-nav-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px; /* Does not fill the whole screen */
+  height: 100vh;
+  background-color: #282c34;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align links to the left */
+  justify-content: center;
+  gap: 1.5rem;
+  padding-left: 2rem;
+}
+
+.mobile-nav-panel a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.mobile-nav-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2.5rem;
+  color: white;
+  cursor: pointer;
+}
+
+/* We don't need the @keyframes anymore, Framer Motion handles it */
+
+/* Animation for the mobile menu sliding in */
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+* Styling for the new Logout button */
+/* Base style for both desktop logout and mobile login/logout */
+.nav-logout-button,
+.nav-logout-button-mobile,
+.nav-login-button-mobile { /* Add a class for mobile login */
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* --- DESKTOP STYLES --- */
+.nav-logout-button {
+  background: transparent;
+  border: 2px solid #e53e3e; /* A strong but not overpowering red */
+  color: #e53e3e;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.nav-logout-button:hover {
+  background-color: #e53e3e;
+  color: white;
+  transform: translateY(-2px); /* Subtle lift effect */
+  box-shadow: 0 4px 10px rgba(229, 62, 62, 0.3); /* Add a glow */
+}
+
+/* --- MOBILE MENU STYLES --- */
+.nav-logout-button-mobile,
+.nav-login-button-mobile {
+  background: #0d6efd; /* Consistent blue for primary mobile action */
+  color: white;
+  padding: 0.8rem 2.5rem;
+  font-size: 1.5rem;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  width: 80%; /* Give them a nice width */
+}
+
+/* Make the mobile logout button red */
+.nav-logout-button-mobile {
+  background: #c53030;
+}
+.nav-logout-button:hover {
+background-color: #ff4d4d;
+color: white;
+}
+/* Specific style for mobile logout to match other links */
+.nav-logout-button-mobile {
+background: #ff4d4d;
+color: white;
+padding: 1rem 2rem;
+font-size: 1.5rem;
+text-decoration: none;
+display: inline-block;
+text-align: center;
+}

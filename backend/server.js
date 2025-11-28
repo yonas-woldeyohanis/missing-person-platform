@@ -63,7 +63,6 @@ io.on('connection', (socket) => {
   });
 
   // When a user sends a message
- // In server.js
 
 socket.on('send_message', async (data) => {
   // --- POWERFUL DEBUG LOGGING ---

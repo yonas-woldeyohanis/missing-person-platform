@@ -1,0 +1,51 @@
+.inbox-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.conversation-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.conversation-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.convo-avatar-placeholder {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.convo-details {
+  color: white;
+}
+
+.convo-participant-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.convo-report-title {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.no-messages-text {
+    color: white;
+    text-align: center;
+    padding: 2rem;
+}
+.conversation-link {
+  text-decoration: none; /* Removes the underline */
+}

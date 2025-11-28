@@ -1,0 +1,103 @@
+.chat-page-container {
+  min-height: 100vh;
+  background: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-window {
+  width: 100%;
+  max-width: 800px;
+  height: calc(100vh - 100px); /* Full height minus navbar and some padding */
+  margin: 2rem auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  border-radius: 12px 12px 0 0;
+}
+.chat-header p { margin: 0; font-weight: bold; font-size: 1.2rem; }
+
+.chat-body {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.message.you { align-items: flex-end; }
+.message.other { align-items: flex-start; }
+
+.message-content {
+  max-width: 70%;
+  padding: 0.8rem 1rem;
+  border-radius: 18px;
+}
+
+.message.you .message-content { background: #0d6efd; color: white; }
+.message.other .message-content { background: #e9ecef; color: #333; }
+
+.message-meta {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 5px;
+  display: flex;
+  gap: 0.5rem;
+}
+.message.you .message-meta { flex-direction: row-reverse; }
+
+.chat-footer {
+  border-top: 1px solid #ddd;
+  padding: 1rem;
+  display: flex;
+}
+
+.chat-footer input {
+  flex-grow: 1;
+  border: 1px solid #ccc;
+  border-radius: 18px;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  outline: none;
+}
+
+.chat-footer button {
+  border: none;
+  background: #0d6efd;
+  color: white;
+  padding: 0 1.5rem;
+  border-radius: 18px;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+.file-upload-button {
+  padding: 0.8rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.chat-image {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+/* Adjust message bubble for images */
+.message-content:has(.chat-image) {
+    background: transparent;
+    padding: 0;
+}

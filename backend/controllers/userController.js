@@ -136,7 +136,7 @@ const loginUser = async (req, res) => {
     res.status(400).json({ message: "Invalid credentials" });
   }
 }; // In userController.js
-const Report = require("../models/reportModel"); // We need the Report model here
+const Report = require("../models/reportModel"); 
 
 // @desc    Get a user's public profile (name and approved posts)
 // @route   GET /api/users/:id/profile
@@ -166,10 +166,36 @@ const getUserProfile = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+const updateUserProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    // user.email = req.body.email || user.email; // Usually we don't allow email change without verify
+    if (req.body.avatar) {
+      user.avatar = req.body.avatar; // Save the Cloudinary URL
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      avatar: updatedUser.avatar, // Return the new avatar
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+};
 
 module.exports = {
   registerUser,
   loginUser,
   verifyOtp,
   getUserProfile,
+  updateUserProfile,
 };
