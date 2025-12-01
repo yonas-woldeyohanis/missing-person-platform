@@ -1,42 +1,66 @@
 const mongoose = require("mongoose");
 
-// This is the blueprint for a missing person report
 const reportSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User", // This creates the connection to the User model
+      ref: "User",
     },
     name: {
       type: String,
       required: [true, "Please add a name"],
     },
+
+    // --- SAFE UPDATE: GENDER ---
+    // We make this optional so the Web App (which has no gender input yet)
+    // can still post reports successfully.
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Unknown"],
+      default: "Unknown", // If Web App posts, it saves as "Unknown"
+      required: false,
+    },
+
+    age: {
+      type: Number,
+      required: [true, "Please add an age"],
+    },
+
+    // --- SAFE UPDATE: LOCATION ---
+    lastSeen: {
+      type: String,
+      required: [true, "Please add a last seen location"],
+    },
+    lastSeenDate: {
+      type: String,
+      required: false,
+    },
     latitude: {
       type: Number,
-      required: false, // Make it optional for now
+      required: false,
     },
     longitude: {
       type: Number,
       required: false,
     },
+
+    // --- SAFE UPDATE: REGION ---
+    // Web App sends it, Mobile App doesn't.
+    // Making it false allows both to work.
+    region: {
+      type: String,
+      required: false,
+      default: "Ethiopia", // Default for Mobile App posts
+    },
+
+    // --- CONTACT ---
+    // Accepts "yonas@gmail.com" (Web) OR "+251911..." (Mobile)
     contactInfo: {
       type: String,
-      required: [true, "Please provide a contact phone number or email"],
+      required: [true, "Please provide contact info"],
     },
-    likes: {
-      type: [mongoose.Schema.Types.ObjectId], // Defines an array of User IDs
-      ref: "User",
-      default: [], // Defaults to an empty array
-    },
-    age: {
-      type: Number,
-      required: [true, "Please add an age"],
-    },
-    lastSeen: {
-      type: String,
-      required: [true, "Please add a last seen location"],
-    },
+
     photoUrl: {
       type: String,
       required: [true, "Please add a photo URL"],
@@ -48,13 +72,15 @@ const reportSchema = mongoose.Schema(
     status: {
       type: String,
       required: true,
-
       enum: ["pending", "approved", "rejected", "found"],
       default: "pending",
     },
-    region: {
-      type: String,
-      required: [true, "Please specify the region"],
+
+    // --- METRICS ---
+    likes: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
     },
     shareCount: {
       type: Number,
@@ -73,12 +99,10 @@ const reportSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    // Mongoose automatically adds a createdAt and updatedAt timestamp
   },
   {
     timestamps: true,
   }
 );
 
-// We export a "Model" based on the schema, which we use to interact with the 'reports' collection
-module.exports = mongoose.model("Report", reportSchema);
+module.expo;

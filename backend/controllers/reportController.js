@@ -369,21 +369,23 @@ const deleteUserReport = async (req, res) => {
 // @desc    Create a new comment on a report
 // @route   POST /api/reports/:id/comments
 // @access  Private
+// @desc    Create a new comment on a report
+// @route   POST /api/reports/:id/comments
+// @access  Private
 const createComment = async (req, res) => {
   try {
-    // Now accepts an optional parentCommentId
     const { text, parentCommentId } = req.body;
     if (!text) {
       return res.status(400).json({ message: "Comment text is required" });
     }
 
+    // 1. Create the Comment
     const commentData = {
       report: req.params.id,
       user: req.user.id,
       text: text,
     };
 
-    // If a parentCommentId is provided, add it to our data
     if (parentCommentId) {
       commentData.parentComment = parentCommentId;
     }
@@ -394,17 +396,18 @@ const createComment = async (req, res) => {
       "name"
     );
 
+    // 2. Increment the Report's commentCount (CRITICAL STEP)
+    await Report.findByIdAndUpdate(req.params.id, { 
+      $inc: { commentCount: 1 } 
+    });
+
+    // 3. Send Response (ONLY AFTER EVERYTHING IS DONE)
     res.status(201).json(populatedComment);
+
   } catch (error) {
+    console.error("Create Comment Error:", error);
     res.status(500).json({ message: "Server Error" });
   }
-   await Report.findByIdAndUpdate(req.params.id, { 
-    $inc: { commentCount: 1 } 
-  });
-  // ---------------------
-
-  res.status(201).json(comment);
-
 };
 const incrementView = async (req, res) => {
   try {
